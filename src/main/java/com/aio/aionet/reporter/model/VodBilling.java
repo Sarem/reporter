@@ -1,12 +1,16 @@
 package com.aio.aionet.reporter.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 //@Table(schema = "show")
 public class VodBilling {
     @Id
@@ -14,9 +18,8 @@ public class VodBilling {
     private Long id;
 
     @ManyToOne
-//    @Column(name = "content_id")
     private VodContent vodContent;
 
-    private Date date;
+    private LocalDateTime date;
 
 }

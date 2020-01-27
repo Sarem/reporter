@@ -9,5 +9,8 @@ public class ContentPurchaseReport {
     private Long seasonId;
     private Long episode_id;
     private Long provider_id;
-
+    private Long oneDayViews;
+    private Long oneWeekViews;
+    private Long oneMountViews;
+    private Long oneYearViews;
 }

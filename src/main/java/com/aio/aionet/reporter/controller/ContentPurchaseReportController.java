@@ -8,6 +8,7 @@ import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -41,6 +42,13 @@ public class ContentPurchaseReportController {
 
         //write all users to csv file
         writer.write(vodService.reports());
+    }
 
+    //TODO remove and write test
+    @GetMapping("/test")
+    public ResponseEntity test(){
+
+        vodService.insertTestData();
+        return ResponseEntity.ok("done");
     }
 }
