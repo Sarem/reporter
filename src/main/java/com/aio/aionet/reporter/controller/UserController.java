@@ -37,7 +37,6 @@ public class UserController {
                 .withOrderedResults(false)
                 .build();
 
-        //write all users to csv file
         writer.write(userService.listUsers());
 
     }
