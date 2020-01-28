@@ -3,27 +3,11 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/public
+    password: po0132stgres
+    url: jdbc:postgresql://185.133.152.172:5432/catherine
     username: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     show-sql: true
-
-
-
-#spring.jpa.hibernate.ddl-auto=update
-
-
-#spring.second-datasource.jdbcUrl = jdbc:postgresql://localhost:5432/public
-#spring.second-datasource.username = postgres
-#spring.second-datasource.password = postgres
-
-#app.datasource.member.url=jjdbc:postgresql://localhost:5432/public?createDatabaseIfNotExist=true
-#app.datasource.member.username=postgres
-#app.datasource.member.password=P@postgres#
-#app.datasource.member.driverClassName=com.mysql.cj.jdbc.Driver
-
-

@@ -11,15 +11,28 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Table(schema = "show")
+@Table(schema = "public")
 public class VodBilling {
     @Id
     @GeneratedValue
     private Long id;
-
+    private java.sql.Timestamp purchaseTime;
+    private String transferred;
+    private Double timeOfPurchasePrice;
+    private Long profileId;
     @ManyToOne
+    @JoinColumn(name="content_id")
     private VodContent vodContent;
-
-    private LocalDateTime date;
+    private Long timeOfPurchasePricerangeId;
+    private java.sql.Timestamp validUntil;
+    private String shared;
+    private Long campaignId;
+    private Long campaignVodDiscountId;
+    private String subscriberId;
+    private String ip;
+    private String deviceName;
+    private String failed;
+    private Long packetId;
+    private Long networkId;
 
 }
