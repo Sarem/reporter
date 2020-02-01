@@ -4,6 +4,7 @@ import com.aio.aionet.reporter.model.ContentPurchaseReport;
 import com.aio.aionet.reporter.model.User;
 import com.aio.aionet.reporter.model.VodContent;
 import com.aio.aionet.reporter.service.VodService;
+import com.fasterxml.jackson.core.io.UTF8Writer;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.StatefulBeanToCsv;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
@@ -30,6 +31,7 @@ public class ContentPurchaseReportController {
         String filename = "reports.csv";
 
         response.setContentType("text/csv");
+        response.setCharacterEncoding("UTF-8");
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + filename + "\"");
 
