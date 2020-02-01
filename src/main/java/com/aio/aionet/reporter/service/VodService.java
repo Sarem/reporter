@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -41,9 +42,18 @@ public class VodService {
         final List<VodContent> contentList = vodContentRepository.findAll();
         final List<ContentPurchaseReport> contentPurchaseReports =
                 vodPurchaseReportMapper.toReport(contentList);
-        contentPurchaseReports.stream().forEach(contentPurchaseReport -> {
-            findBillings(contentPurchaseReport);
+        System.out.println(contentPurchaseReports.size());
+        IntStream.range(0, contentPurchaseReports.size()).parallel().forEach(i -> {
+            if(i%1000==0){
+                System.out.println(i);
+            }
+            findBillings(contentPurchaseReports.get(i));
         });
+
+
+//        contentPurchaseReports.parallelStream().forEach(contentPurchaseReport -> {
+//            findBillings(contentPurchaseReport);
+//        });
         return contentPurchaseReports;
     }
     private void findBillings(ContentPurchaseReport contentPurchaseReport){
