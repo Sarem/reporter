@@ -26,16 +26,44 @@ import java.util.stream.IntStream;
 @Slf4j
 @Service
 @AllArgsConstructor
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class VodService {
 
     private VodContentRepository vodContentRepository;
-    private ShowRepository showRepository;
-    private VodBillingRepository vodBillingRepository;
     private VodPurchaseReportMapper vodPurchaseReportMapper;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Transactional
+    public List<ContentPurchaseDurationReport> customReport(CustomCsvRequest customCsvRequest) {
+        final List<VodContent> contentList=new ArrayList<>();
+        if(customCsvRequest.getContentId()!=null){
+            contentList.add(vodContentRepository.findById(customCsvRequest.getContentId()).orElseThrow());
+        }
+        final List<ContentPurchaseDurationReport> customReports = vodPurchaseReportMapper.toCustomReport(contentList);
+        System.out.println(customReports.size());
+        IntStream.range(0, customReports.size()).parallel().forEach(i -> {
+            if(i%1000==0){
+                System.out.println(i);
+            }
+            findCustomBillings(customReports.get(i),customCsvRequest.getFrom(),customCsvRequest.getTo());
+        });
+        return customReports;
+    }
+
+    @Transactional
+    public List<ContentPurchaseDurationReport> customReportByAsset(String asset,LocalDateTime from,LocalDateTime to) {
+        final List<VodContent> contentList=vodContentRepository.findAllByAssetName(asset);
+        final List<ContentPurchaseDurationReport> customReports = vodPurchaseReportMapper.toCustomReport(contentList);
+        System.out.println(customReports.size());
+        IntStream.range(0, customReports.size()).parallel().forEach(i -> {
+            if(i%1000==0){
+                System.out.println(i);
+            }
+            findCustomBillings(customReports.get(i),from,to);
+        });
+        return customReports;
+    }
 
     @Transactional
     public List<ContentPurchaseReport> reports() {
@@ -49,18 +77,27 @@ public class VodService {
             }
             findBillings(contentPurchaseReports.get(i));
         });
-
-
-//        contentPurchaseReports.parallelStream().forEach(contentPurchaseReport -> {
-//            findBillings(contentPurchaseReport);
-//        });
         return contentPurchaseReports;
     }
+    private void findCustomBillings(ContentPurchaseDurationReport contentPurchaseDurationReport,LocalDateTime from,LocalDateTime to){
+        contentPurchaseDurationReport.setCustomViews(getContOfView(contentPurchaseDurationReport.getContentId(),from,to));
+    }
+
     private void findBillings(ContentPurchaseReport contentPurchaseReport){
         contentPurchaseReport.setOneDayViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusDays(1)));
         contentPurchaseReport.setOneWeekViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusWeeks(1)));
         contentPurchaseReport.setOneMountViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusMonths(1)));
         contentPurchaseReport.setOneYearViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusYears(1)));
+    }
+    private Long getContOfView(Long id,LocalDateTime from,LocalDateTime to){
+
+        var qVodBilling = QVodBilling.vodBilling;
+        var query = new JPAQuery(entityManager);
+        query.from(qVodBilling)
+                .where(qVodBilling.vodContent.id.eq(id)
+                        .and(qVodBilling.validUntil.between(Timestamp.valueOf(from),Timestamp.valueOf(to))))
+                .distinct();
+        return query.fetchCount();
     }
 
     private Long getContOfView(Long id,LocalDateTime time){
@@ -73,23 +110,4 @@ public class VodService {
         return query.fetchCount();
     }
 
-    //TODO remove
-    public void insertTestData(){
-//        createTestVodContent("Baby Boss");
-//        createTestVodContent("Toy story");
-    }
-
-    private void createTestVodContent(String title) {
-//        Show show=new Show(null,title);
-//        showRepository.save(show);
-//        VodContent vodContent=new VodContent(null,show,1L,1L,1L);
-//        vodContentRepository.save(vodContent);
-//        List<VodBilling> vodBillings=new ArrayList<>();
-//        for (int i=1;i<100;i++){
-//            final LocalDateTime localDateTime = LocalDateTime.now().minusDays(i);
-//            VodBilling vodBilling=new VodBilling(null,vodContent,localDateTime);
-//            vodBillings.add(vodBilling);
-//        }
-//        vodBillingRepository.saveAll(vodBillings);
-    }
 }

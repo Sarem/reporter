@@ -1,0 +1,34 @@
+GET http://localhost:8093/export-vod
+
+###
+#GET http://localhost:8093/export-custom-vod
+#Content-Type: application/json
+#
+#{
+#  "contentId": 10,
+#  "from": "2010-02-03T11:50:18.156Z",
+#  "to": "2020-02-03T11:50:18.156Z"
+#}
+#
+
+###
+
+# curl -X GET "http://localhost:8093/export-custom-vod/46/2010-02-03T11%3A50%3A18.156Z/2020-02-03T11%3A50%3A18.156Z" -H "accept: */*"
+GET http://localhost:8093/export-custom-vod/46/2010-02-03T11%3A50%3A18.156Z/2020-02-03T11%3A50%3A18.156Z
+accept: */*
+
+###
+
+
+
+###
+#{
+#  "contentId" : "sad",
+#  "from": "2020-02-03T11:50:18.156Z",
+#  "to": "2020-02-03T11:50:18.156Z"
+#}
+
+
+GET http://localhost:8093/export-custom-vod-by-asset/BTS0230-01-11/2010-02-03T11%3A50%3A18.156Z/2020-02-03T11%3A50%3A18.156Z
+
+###

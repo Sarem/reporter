@@ -3,15 +3,11 @@ package com.aio.aionet.reporter.model;
 import lombok.Data;
 
 @Data
-public class ContentPurchaseReport {
+public class ContentPurchaseDurationReport {
     private Long contentId;
-    private String assetName;
     private String showTitle;
     private Long seasonId;
     private Long episode_id;
     private Long provider_id;
-    private Long oneDayViews;
-    private Long oneWeekViews;
-    private Long oneMountViews;
-    private Long oneYearViews;
+    private Long customViews;
 }

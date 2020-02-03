@@ -14,4 +14,12 @@ public interface VodPurchaseReportMapper {
 
     List<ContentPurchaseReport> toReport(List<VodContent> vodContents);
 
+    @Mapping(target = "contentId",source = "id")
+    @Mapping(target = "showTitle",source = "show.title")
+    ContentPurchaseDurationReport toCustomReport(VodContent vodContents);
+
+    List<ContentPurchaseDurationReport> toCustomReport(List<VodContent> vodContents);
+
+
+
 }
