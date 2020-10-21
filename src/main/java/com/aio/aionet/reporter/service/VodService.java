@@ -79,11 +79,30 @@ public class VodService {
         });
         return contentPurchaseReports;
     }
+
+    @Transactional
+    public List<ContentPurchaseDurationReport> customReports(LocalDateTime from,LocalDateTime to) {
+        final List<VodContent> contentList = vodContentRepository.findAll();
+        final List<ContentPurchaseDurationReport> contentPurchaseReports =
+                vodPurchaseReportMapper.toCustomReport(contentList);
+        System.out.println(contentPurchaseReports.size());
+        IntStream.range(0, contentPurchaseReports.size()).parallel().forEach(i -> {
+            if(i%1000==0){
+                System.out.println(i);
+            }
+            findCustomBillings(contentPurchaseReports.get(i)
+            ,from,to);
+        });
+        return contentPurchaseReports;
+    }
+
+
     private void findCustomBillings(ContentPurchaseDurationReport contentPurchaseDurationReport,LocalDateTime from,LocalDateTime to){
         contentPurchaseDurationReport.setCustomViews(getContOfView(contentPurchaseDurationReport.getContentId(),from,to));
     }
 
     private void findBillings(ContentPurchaseReport contentPurchaseReport){
+        contentPurchaseReport.setTotalViews(getContOfView(contentPurchaseReport.getContentId()));
         contentPurchaseReport.setOneDayViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusDays(1)));
         contentPurchaseReport.setOneWeekViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusWeeks(1)));
         contentPurchaseReport.setOneMountViews(getContOfView(contentPurchaseReport.getContentId(),LocalDateTime.now().minusMonths(1)));
@@ -106,6 +125,16 @@ public class VodService {
         query.from(qVodBilling)
                 .where(qVodBilling.vodContent.id.eq(id)
                         .and(qVodBilling.validUntil.after(Timestamp.valueOf(time))))
+                .distinct();
+        return query.fetchCount();
+    }
+
+    private Long getContOfView(Long id){
+        var qVodBilling = QVodBilling.vodBilling;
+        var query = new JPAQuery(entityManager);
+        query.from(qVodBilling)
+                .where(qVodBilling.vodContent.id.eq(id)
+                        )
                 .distinct();
         return query.fetchCount();
     }

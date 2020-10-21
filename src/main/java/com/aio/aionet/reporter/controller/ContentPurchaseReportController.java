@@ -65,6 +65,25 @@ public class ContentPurchaseReportController {
         writer.write(vodService.customReport(new CustomCsvRequest(id,from,to)));
     }
 
+    @GetMapping(value = "/export-all-custom-vod/{from}/{to}" )
+    public void exportAllCustomCSV(HttpServletResponse response, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) throws Exception {
+        //set file name and content type
+        String filename = "all-custom-reports.csv";
+        response.setContentType("text/csv");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"");
+        //create a csv writer
+        StatefulBeanToCsv<ContentPurchaseDurationReport> writer = new StatefulBeanToCsvBuilder<ContentPurchaseDurationReport>(response.getWriter())
+                .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                .withSeparator(CSVWriter.DEFAULT_SEPARATOR)
+                .withOrderedResults(false)
+                .build();
+        //write all vod to csv file
+//        CustomCsvRequest customCsvRequest;
+        writer.write(vodService.customReports(from,to));
+    }
+
     @GetMapping(value = "/export-custom-vod-by-asset/{asset}/{from}/{to}" )
     public void exportCustomCSV(HttpServletResponse response, @PathVariable String asset, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) throws Exception {
         //set file name and content type

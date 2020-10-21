@@ -11,5 +11,4 @@ import org.springframework.stereotype.Repository;
 public interface VodBillingRepository extends CrudRepository<VodBilling, Long>
         , QuerydslPredicateExecutor<VodBilling> {
 
-
 }

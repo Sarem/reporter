@@ -4,8 +4,8 @@ spring:
   datasource:
     driverClassName: org.postgresql.Driver
     password: po0132stgres
-#    url: jdbc:postgresql://10.254.2.6:5432/catherine
-    url: jdbc:postgresql://185.133.152.172:5432/catherine
+    url: jdbc:postgresql://10.254.2.6:5432/catherine
+#    url: jdbc:postgresql://185.133.152.172:5432/catherine
     username: postgres
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

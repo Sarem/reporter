@@ -14,4 +14,6 @@ public class ContentPurchaseReport {
     private Long oneWeekViews;
     private Long oneMountViews;
     private Long oneYearViews;
+    private Long totalViews;
+
 }

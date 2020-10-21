@@ -3,10 +3,10 @@ package com.aio.aionet.reporter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class ReporterApplicationTests {
 
-    @Test
+//    @Test
     void contextLoads() {
     }
 
